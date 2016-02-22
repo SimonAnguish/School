@@ -1,0 +1,179 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      5693,        170]
+NotebookOptionsPosition[      5403,        155]
+NotebookOutlinePosition[      5757,        171]
+CellTagsIndexPosition[      5714,        168]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[{
+ "Simon Anguish\n\n1. ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    SuperscriptBox["n", "2"], ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\tFor each of the nodes, we will have to iterate through the matrix ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["n", "2"], " ", "times"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ": n times for each row, and n times for each column in that row. For each \
+of these, we will add ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["m", "n"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " nodes to the list L, where ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["m", "n"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is a constant of the number of edges for that row. All together, we will \
+have ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["n", "2"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to check each row, and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["m", "n"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to add each edge to the list. Since ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["m", "n"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "is a constant, we can ignore it. Therefore, we have ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    SuperscriptBox["n", "2"], ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ".\n\t\n2.  To have a node be strictly greater than ",
+ Cell[BoxData[
+  FormBox[
+   FractionBox["n", "2"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " nodes away, you must have at least ",
+ Cell[BoxData[
+  FormBox[
+   FractionBox["n", "2"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " edges between s and t. This means you must have at least ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox["n", "2"], "+", "1"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " nodes between s and t. Therefore, you must have ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox["n", "2"], "+", "1", "+", "2"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " nodes used in the path from s to t: ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox["n", "2"], "+", "1"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " for the path itself, and 2 for s and t. Therefore, we only have ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"n", "-", 
+     RowBox[{"(", 
+      RowBox[{
+       FractionBox["n", "2"], "+", "3"}], ")"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"or", " ", 
+      FractionBox["n", "2"]}], "-", "3"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " nodes free. This shows that, if there were an alternative path from s to \
+t, it would in the best case use those ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox["n", "2"], "-", "3"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " nodes and not pass the restriction that the path be greater than ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox["n", "2"], " ", "nodes", " ", "away"}], ","}], 
+   TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " or it uses one of the nodes from the original path of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     FractionBox["n", "2"], "+", "3"}], ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " nodes, and therefore, that node v can be deleted to destroy the path.\n\n\
+To create an algorithm for this, we can use the algorithm for a breadth-first \
+search of a graph G with an adjacency list. This provides the runtime \
+analysis of O(m+n), where m is the number of edges in the graph, and n is the \
+number of nodes. We would want to run BFS from either root nodes s or t to \
+build a node tree. We can then remove any paths from the root to the end node \
+where:\n\t- The end node is not the target node, and\n\t- The target node is \
+less than or equal to ",
+ Cell[BoxData[
+  FormBox[
+   FractionBox["n", "2"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " levels away from the root.\nWe should then be able to find the level where \
+there is only one node, v, linking s and t."
+}], "Text",
+ CellChangeTimes->{{3.6638593032609386`*^9, 3.6638593199948606`*^9}, {
+  3.6638599198696337`*^9, 3.663860101783785*^9}, {3.663860551834261*^9, 
+  3.663860555168106*^9}, {3.6638647591992807`*^9, 3.663864804481036*^9}, {
+  3.663865786182584*^9, 3.663865835242332*^9}, {3.6638661460343533`*^9, 
+  3.663866178293192*^9}, {3.6638662211906557`*^9, 3.6638664074391212`*^9}, {
+  3.663866447531598*^9, 3.663866589629487*^9}, {3.6638667105887127`*^9, 
+  3.663866788225411*^9}, {3.663866846769485*^9, 3.66386686829482*^9}, {
+  3.663866914406617*^9, 3.663866965010468*^9}, {3.6638670030538683`*^9, 
+  3.663867074098534*^9}, {3.663867133038272*^9, 3.6638672297309017`*^9}}],
+
+Cell["", "Title"]
+},
+WindowSize->{740, 655},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 4822, 131, 543, "Text"],
+Cell[5382, 153, 17, 0, 92, "Title"]
+}
+]
+*)
+
+(* End of internal cache information *)
