@@ -12,14 +12,14 @@ class Untitled {
 		// graph[i][j][0] <-- edge value
 		// graph[i][j][1] <-- target node index
 		int graph[][][] = {
-			{{9,2},{14,6},{15,7}}, 	//0
-			{{23,3}},				//1
-			{{19,8}},				//2
-			{{6,3},{6,8}},			//3
-			{{11,4},{16,8}},		//4
-			{{18,3},{30,5},{5,7}},	//5
-			{{20,5},{44,8}},		//6
-			{{}}					//7
+			{{9,1},{14,5},{15,6}}, 	//0
+			{{23,2}},				//1
+			{{19,7}},				//2
+			{{6,2},{6,7}},			//3
+			{{11,3},{16,7}},		//4
+			{{18,2},{30,4},{5,6}},	//5
+			{{20,4},{44,7}},		//6
+			{}					//7
 		};
 		
 		return graph;
@@ -44,7 +44,7 @@ class Untitled {
 		cloud.add(c);
 		
 		// While the cloud does not have every node
-		while (cloud.size() != 5) {
+		while (cloud.size() < 9) {
 			int shortest_path = 50;
 			int shortest_path_node = 1;
 			
@@ -60,8 +60,10 @@ class Untitled {
 			}
 			
 			// Get the shortest path in edges
+			System.out.println("EDGES");
 			for (int i=0;i<curr_pos;i++) {
-				if (edges[i][0] < shortest_path) {
+				System.out.println(edges[i][0] + "->" + edges[i][1]);
+				if (edges[i][0] < shortest_path && !cloud.contains(edges[i][1])) {
 					edge_to_delete = i;
 					shortest_path = edges[i][0];
 					shortest_path_node = edges[i][1];
