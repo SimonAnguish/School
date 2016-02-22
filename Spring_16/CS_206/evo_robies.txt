@@ -1,0 +1,4 @@
+same amount of differential equations as neurons
+for each 10 neurons, there are 10 synapses going to that neuron
+ty' = -y+Sum(j=1->n)wOmega(g(y+theta)) + I
+
