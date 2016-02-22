@@ -1,0 +1,117 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      3790,        108]
+NotebookOptionsPosition[      3281,         85]
+NotebookOutlinePosition[      3635,        101]
+CellTagsIndexPosition[      3592,         98]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Simon Anguish
+Homework 4\
+\>", "Subtitle",
+ CellChangeTimes->{{3.665082429738945*^9, 3.665082435875862*^9}}],
+
+Cell["1)", "Subtitle",
+ CellChangeTimes->{{3.6650800310768757`*^9, 3.665080035048403*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"Sort", " ", "jobs", "  ", "by", " ", 
+     FractionBox[
+      SubscriptBox["w", "j"], 
+      SubscriptBox["t", "j"]], " ", "descending"}], ";"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\nElapsed time = 0\nTotal weight = 0;\nJobs Scheduled = [];\n\nFor job in \
+jobs {\n\tElapsed time += job.time;\n\tTotal weight = Elapsed time * \
+job.weight;\n\tJobs Scheduled[] = job;\n}"
+}], "Text",
+ CellChangeTimes->{{3.665079674912258*^9, 3.665079968896368*^9}, {
+  3.665080612624838*^9, 3.6650806440486403`*^9}}],
+
+Cell["\<\
+Proving this with the exchange arguement involves taking a look at the sorted \
+jobs. Assuming the jobs are sorted, such that job i has a lower weighted \
+ration than job j, switching job i with job j would provide a different sum \
+and thus different outcome. If the sum of the two jobs J\[CloseCurlyQuote] \
+after the swap is higher than the sum of the two jobs J before the swap, then \
+swapping i and j would prove to be not more optimal. If the swap does make \
+the process more optimal, by performing these swaps, as long as the swap \
+makes the processes more optimal, we may eventually be lead to an optimal \
+sollution.\
+\>", "Text",
+ CellChangeTimes->{{3.6650799704245253`*^9, 3.665080015575305*^9}, 
+   3.665080606121867*^9, {3.6650806494457006`*^9, 3.66508069611092*^9}, {
+   3.6650808182134857`*^9, 3.66508086653804*^9}, {3.66508089868312*^9, 
+   3.665080951968582*^9}, {3.665081028132704*^9, 3.665081068482041*^9}, {
+   3.665081108822082*^9, 3.6650812388722773`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2)", "Subtitle",
+ CellChangeTimes->{{3.66508003775104*^9, 3.665080038575624*^9}}],
+
+Cell["\<\
+Optimality for a classroom scheduling algorithm is bounded by a minimum \
+number of classrooms needed as the maximum number of classes that occur at \
+the same time. With the earliest-finish-time-first algorithm, the there are \
+two possiblities when adding a new class to a classroom: If the start time is \
+before the last end time of all set classrooms, we need to add a new \
+classroom. If the start time is after the last end time of a set classroom, \
+we can add that class to a pre-existing classroom. This will ensure that \
+there will never be more classrooms in use than the maximum number of classes \
+scheduled. \
+\>", "Text",
+ CellChangeTimes->{{3.6650821644557953`*^9, 3.665082174309202*^9}, {
+  3.665082205888254*^9, 3.665082424299656*^9}}]
+}, Open  ]]
+},
+WindowSize->{740, 655},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 118, 4, 81, "Subtitle"],
+Cell[700, 28, 90, 1, 51, "Subtitle"],
+Cell[793, 31, 586, 14, 217, "Text"],
+Cell[1382, 47, 991, 15, 125, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2410, 67, 87, 1, 51, "Subtitle"],
+Cell[2500, 70, 765, 12, 144, "Text"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
