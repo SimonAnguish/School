@@ -26,12 +26,52 @@ class Untitled {
 	}
 	
 	public static void Dijkstra(int[][][] graph, int start, int target) {
-		int[] cloud = new int[8];
-		int current_node = start;
+		ArrayList cloud = new ArrayList();
+		
+		int edge_to_delete = 0;
+		
+		// Current Node
+		int c = start;
+		
+		// This is the list of nodes and the distance to each one
+		int[] distance_to_node = new int[8];
+		
+		// these are the edges we will consider
+		int[][] edges = new int[30][2];
+		int curr_pos = 0;
 		
 		// Add the start node to the cloud
-		cloud[0] = current_node;
+		cloud.add(c);
 		
-		int[] edges_list = graph[start]
+		// While the cloud does not have every node
+		while (cloud.size() != 5) {
+			int shortest_path = 50;
+			int shortest_path_node = 1;
+			
+			System.out.println("CLOUD CONTAINS NODES: " + cloud);
+			
+			// Add all the edges around the current node to 'edges'
+			System.out.println("EDGES AROUND NODE " + c + ":");
+			for (int i=0;i<graph[c].length;i++) {
+				System.out.print(graph[c][i][0] + "->" + graph[c][i][1]+ "\n");
+				edges[curr_pos][0] = graph[c][i][0];
+				edges[curr_pos][1] = graph[c][i][1];
+				curr_pos++;
+			}
+			
+			// Get the shortest path in edges
+			for (int i=0;i<curr_pos;i++) {
+				if (edges[i][0] < shortest_path) {
+					edge_to_delete = i;
+					shortest_path = edges[i][0];
+					shortest_path_node = edges[i][1];
+				}
+			}
+			c = shortest_path_node;
+			edges[edge_to_delete][0] = 9999999;
+			edges[edge_to_delete][1] = 9999999;
+			
+			cloud.add(c);
+		}
 	}
 }
