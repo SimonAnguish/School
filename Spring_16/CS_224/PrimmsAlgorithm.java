@@ -3,7 +3,7 @@ import java.util.*;
 class Untitled {
 	public static void main(String[] args) {
 		int[][][] graph = makeGraph();
-		Dijkstra(graph, 0, 7);
+		Primm(graph, 0, 7);
 	}
 	
 	public static int[][][] makeGraph() {
@@ -25,7 +25,7 @@ class Untitled {
 		return graph;
 	}
 	
-	public static void Dijkstra(int[][][] graph, int start, int target) {
+	public static void Primm(int[][][] graph, int start, int target) {
 		ArrayList cloud = new ArrayList();
 		
 		int edge_to_delete = 0;
