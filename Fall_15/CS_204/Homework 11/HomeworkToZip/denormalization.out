@@ -1,0 +1,258 @@
+SQL> 
+SQL> -- Execute the script file. --
+SQL> start &&1
+SQL> create table merged_table (
+  2    dname varchar(20),
+  3    dnumber decimal(2),
+  4    mgrssn decimal(9),
+  5    mgrstartdate date,
+  6    dlocation varchar(20),
+  7    pname varchar(20),
+  8    pnumber decimal(2),
+  9    plocation varchar(20),
+ 10    constraint merged_pmk primary key (
+ 11  	 dnumber, dlocation, pnumber
+ 12    )
+ 13  );
+
+Table created.
+
+SQL> 
+SQL> start create_tables_dept_locs_projs.sql;
+SQL> /* Create the tables Department, Dept_locations, and Project only. */
+SQL> 
+SQL> create table Department (
+  2    dname varchar(20),
+  3    dnumber decimal(2) primary key,
+  4    mgrssn decimal(9), -- omit the foreign key constraint to Employee.ssn.
+  5    mgrstartdate date
+  6  );
+
+Table created.
+
+SQL> 
+SQL> create table Dept_locations (
+  2    dnumber decimal(2) references Department(dnumber),
+  3    dlocation varchar(20),
+  4    constraint dept_locs_pmk primary key (dnumber, dlocation)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> create table Project (
+  2    pname varchar(20),
+  3    pnumber decimal(2) primary key,
+  4    plocation varchar(20),
+  5    dnum decimal(2) references Department(dnumber)
+  6  );
+
+Table created.
+
+SQL> SQL> start insert_tuples_dept_locs_projs.sql;
+SQL> /* Insert tuples to Department, Dept_locations, and Project only. */
+SQL> 
+SQL> -- Set the mgrssn column to null since we have not created the Employee table.
+SQL> insert into Department values ('Research', 5, null, '22-May-78');
+
+1 row created.
+
+SQL> insert into Department values ('Administration', 4, null, '01-Jan-85');
+
+1 row created.
+
+SQL> insert into Department values ('Headquarters', 1, null, '19-Jun-71');
+
+1 row created.
+
+SQL> 
+SQL> insert into Dept_locations values (1, 'Houston');
+
+1 row created.
+
+SQL> insert into Dept_locations values(4, 'Stafford');
+
+1 row created.
+
+SQL> insert into Dept_locations values(5, 'Bellaire');
+
+1 row created.
+
+SQL> insert into Dept_locations values(5, 'Sugarland');
+
+1 row created.
+
+SQL> insert into Dept_locations values(5, 'Houston');
+
+1 row created.
+
+SQL> 
+SQL> insert into Project values ('ProductX', 1, 'Bellaire', 5);
+
+1 row created.
+
+SQL> insert into Project values ('ProductY', 2, 'Sugarland', 5);
+
+1 row created.
+
+SQL> insert into Project values ('ProductZ', 3, 'Houston', 5);
+
+1 row created.
+
+SQL> insert into Project values ('Computerization', 10, 'Stafford', 4);
+
+1 row created.
+
+SQL> insert into Project values ('Reorganization', 20, 'Houston', 1);
+
+1 row created.
+
+SQL> insert into Project values ('Newbenefits', 30, 'Stafford', 4);
+
+1 row created.
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> SQL> 
+SQL> insert into merged_table (
+  2    dname,
+  3    dnumber,
+  4    mgrssn,
+  5    mgrstartdate,
+  6    dlocation,
+  7    pname,
+  8    pnumber,
+  9    plocation
+ 10  )
+ 11  select
+ 12    dname,
+ 13    department.dnumber,
+ 14    mgrssn,
+ 15    mgrstartdate,
+ 16    dlocation,
+ 17    pname,
+ 18    pnumber,
+ 19    plocation
+ 20  from department, dept_locations, project
+ 21  where department.dnumber = dept_locations.dnumber
+ 22  and project.dnum = department.dnumber;
+
+12 rows created.
+
+SQL> 
+SQL> start delete_tables_dept_locs_projs.sql;
+SQL> /* Drops the tables Department, Dept_locations, and Project. */
+SQL> 
+SQL> alter table Dept_locations drop constraint dept_locs_pmk;
+
+Table altered.
+
+SQL> 
+SQL> alter table Dept_locations drop column dnumber;
+
+Table altered.
+
+SQL> 
+SQL> alter table Project drop column dnum;
+
+Table altered.
+
+SQL> 
+SQL> /* Drops the actual tables */
+SQL> 
+SQL> drop table Dept_locations;
+
+Table dropped.
+
+SQL> 
+SQL> drop table Project;
+
+Table dropped.
+
+SQL> 
+SQL> drop table Department;
+
+Table dropped.
+
+SQL> SQL> 
+SQL> create index merged_index on merged_table (dnumber);
+
+Index created.
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> -- (1)
+SQL> select distinct dnumber, dname, mgrssn, mgrstartdate
+  2  from merged_table
+  3  order by dnumber;
+
+   DNUMBER DNAME                    MGRSSN MGRSTARTD                            
+---------- -------------------- ---------- ---------                            
+         1 Headquarters                    19-JUN-71                            
+         4 Administration                  01-JAN-85                            
+         5 Research                        22-MAY-78                            
+
+SQL> 
+SQL> select distinct dnumber, dlocation
+  2  from merged_table;
+
+   DNUMBER DLOCATION                                                            
+---------- --------------------                                                 
+         1 Houston                                                              
+         5 Bellaire                                                             
+         4 Stafford                                                             
+         5 Houston                                                              
+         5 Sugarland                                                            
+
+SQL> 
+SQL> select distinct pnumber, pname, plocation, dnumber as dnum
+  2  from merged_table
+  3  order by pnumber;
+
+   PNUMBER PNAME                PLOCATION                  DNUM                 
+---------- -------------------- -------------------- ----------                 
+         1 ProductX             Bellaire                      5                 
+         2 ProductY             Sugarland                     5                 
+         3 ProductZ             Houston                       5                 
+        10 Computerization      Stafford                      4                 
+        20 Reorganization       Houston                       1                 
+        30 Newbenefits          Stafford                      4                 
+
+6 rows selected.
+
+SQL> 
+SQL> -- (2)
+SQL> select distinct plocation, pname
+  2  from merged_table
+  3  where dname = 'Administration';
+
+PLOCATION            PNAME                                                      
+-------------------- --------------------                                       
+Stafford             Computerization                                            
+Stafford             Newbenefits                                                
+
+SQL> 
+SQL> drop index merged_index;
+
+Index dropped.
+
+SQL> 
+SQL> drop table merged_table;
+
+Table dropped.
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> SQL> 
+SQL> -- Restore the options to their default values. --
+SQL> spool off

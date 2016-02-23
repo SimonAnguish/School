@@ -1,0 +1,193 @@
+SQL> 
+SQL> -- Execute the script file. --
+SQL> start &&1
+SQL> create cluster dept_cluster
+  2  (dnumber decimal(2));
+
+Cluster created.
+
+SQL> 
+SQL> create table Department (
+  2    dname varchar(20),
+  3    dnumber decimal(2) primary key,
+  4    mgrssn decimal(9), -- omit the foreign key constraint to Employee.ssn.
+  5    mgrstartdate date
+  6  ) cluster dept_cluster (dnumber);
+
+Table created.
+
+SQL> 
+SQL> create table Dept_locations (
+  2    dnumber decimal(2) references Department(dnumber),
+  3    dlocation varchar(20),
+  4    constraint dept_locs_pmk primary key (dnumber, dlocation)
+  5  ) cluster dept_cluster (dnumber);
+
+Table created.
+
+SQL> 
+SQL> create table Project (
+  2    pname varchar(20),
+  3    pnumber decimal(2) primary key,
+  4    plocation varchar(20),
+  5    dnum decimal(2) references Department(dnumber)
+  6  ) cluster dept_cluster (dnum);
+
+Table created.
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> create index dnumber on cluster dept_cluster;
+
+Index created.
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> /* Insert tuples to Department, Dept_locations, and Project only. */
+SQL> start insert_tuples_dept_locs_projs.sql;
+SQL> /* Insert tuples to Department, Dept_locations, and Project only. */
+SQL> 
+SQL> -- Set the mgrssn column to null since we have not created the Employee table.
+SQL> insert into Department values ('Research', 5, null, '22-May-78');
+
+1 row created.
+
+SQL> insert into Department values ('Administration', 4, null, '01-Jan-85');
+
+1 row created.
+
+SQL> insert into Department values ('Headquarters', 1, null, '19-Jun-71');
+
+1 row created.
+
+SQL> 
+SQL> insert into Dept_locations values (1, 'Houston');
+
+1 row created.
+
+SQL> insert into Dept_locations values(4, 'Stafford');
+
+1 row created.
+
+SQL> insert into Dept_locations values(5, 'Bellaire');
+
+1 row created.
+
+SQL> insert into Dept_locations values(5, 'Sugarland');
+
+1 row created.
+
+SQL> insert into Dept_locations values(5, 'Houston');
+
+1 row created.
+
+SQL> 
+SQL> insert into Project values ('ProductX', 1, 'Bellaire', 5);
+
+1 row created.
+
+SQL> insert into Project values ('ProductY', 2, 'Sugarland', 5);
+
+1 row created.
+
+SQL> insert into Project values ('ProductZ', 3, 'Houston', 5);
+
+1 row created.
+
+SQL> insert into Project values ('Computerization', 10, 'Stafford', 4);
+
+1 row created.
+
+SQL> insert into Project values ('Reorganization', 20, 'Houston', 1);
+
+1 row created.
+
+SQL> insert into Project values ('Newbenefits', 30, 'Stafford', 4);
+
+1 row created.
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> SQL> 
+SQL> -- (1)
+SQL> select * from Department;
+
+DNAME                   DNUMBER     MGRSSN MGRSTARTD                            
+-------------------- ---------- ---------- ---------                            
+Headquarters                  1            19-JUN-71                            
+Research                      5            22-MAY-78                            
+Administration                4            01-JAN-85                            
+
+SQL> select * from Dept_locations;
+
+   DNUMBER DLOCATION                                                            
+---------- --------------------                                                 
+         1 Houston                                                              
+         4 Stafford                                                             
+         5 Bellaire                                                             
+         5 Houston                                                              
+         5 Sugarland                                                            
+
+SQL> select * from Project;
+
+PNAME                   PNUMBER PLOCATION                  DNUM                 
+-------------------- ---------- -------------------- ----------                 
+Reorganization               20 Houston                       1                 
+ProductX                      1 Bellaire                      5                 
+ProductY                      2 Sugarland                     5                 
+ProductZ                      3 Houston                       5                 
+Computerization              10 Stafford                      4                 
+Newbenefits                  30 Stafford                      4                 
+
+6 rows selected.
+
+SQL> 
+SQL> -- (2)
+SQL> select dlocation, pname
+  2  from Dept_locations, Project, Department
+  3  where dname = 'Administration'
+  4  and Dept_locations.dnumber = Department.dnumber
+  5  and Project.dnum = Department.dnumber;
+
+DLOCATION            PNAME                                                      
+-------------------- --------------------                                       
+Stafford             Computerization                                            
+Stafford             Newbenefits                                                
+
+SQL> 
+SQL> drop index dnumber;
+
+Index dropped.
+
+SQL> 
+SQL> drop table dept_locations;
+
+Table dropped.
+
+SQL> drop table project;
+
+Table dropped.
+
+SQL> drop table department;
+
+Table dropped.
+
+SQL> 
+SQL> drop cluster dept_cluster;
+
+Cluster dropped.
+
+SQL> SQL> 
+SQL> -- Restore the options to their default values. --
+SQL> spool off

@@ -1,0 +1,3 @@
+ALTER TABLE Orders REMOVE CONSTRAINT pmk_orders;
+
+DROP TABLE Orders;
