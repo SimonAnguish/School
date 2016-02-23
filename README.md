@@ -6,4 +6,4 @@ Fall 2015
 ### CS 201
 ### CS 204
 ### CS 224
-*  Dijkstra's algorithm
+*  [Primm's algorithm](https://github.com/SimonAnguish/School/blob/master/Spring_16/CS_224/PrimmsAlgorithm.java "Primm's Algorithm")
